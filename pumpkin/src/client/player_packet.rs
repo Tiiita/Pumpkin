@@ -580,20 +580,25 @@ impl Player {
                     let world_pos = WorldPosition(location.0 + face.to_offset());
                     let block_bounding_box = BoundingBox::from_block(&world_pos);
 
-
-                    let can_place =
-                        world
-                            .get_nearby_players(Vector3::new(world_pos.0.x as f64, world_pos.0.y as f64, world_pos.0.z as f64), 20)
-                            .await
-                            .values()
-                            .all(|player| {
-                                !player
-                                    .living_entity
-                                    .entity
-                                    .bounding_box
-                                    .load()
-                                    .intersects(&block_bounding_box)
-                            });
+                    let can_place = world
+                        .get_nearby_players(
+                            Vector3::new(
+                                f64::from(world_pos.0.x),
+                                f64::from(world_pos.0.y),
+                                f64::from(world_pos.0.z),
+                            ),
+                            20,
+                        )
+                        .await
+                        .values()
+                        .all(|player| {
+                            !player
+                                .living_entity
+                                .entity
+                                .bounding_box
+                                .load()
+                                .intersects(&block_bounding_box)
+                        });
 
                     if can_place {
                         world.set_block(world_pos, block.default_state_id).await;
