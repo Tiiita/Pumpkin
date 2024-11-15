@@ -580,9 +580,10 @@ impl Player {
                     let world_pos = WorldPosition(location.0 + face.to_offset());
                     let block_bounding_box = BoundingBox::from_block(&world_pos);
 
+
                     let can_place =
                         world
-                            .get_players_by_pos(world_pos)
+                            .get_nearby_players(Vector3::new(world_pos.0.x as f64, world_pos.0.y as f64, world_pos.0.z as f64), 20)
                             .await
                             .values()
                             .all(|player| {
